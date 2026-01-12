@@ -1,5 +1,7 @@
 import * as pdfjs from "pdfjs-dist/legacy/build/pdf.mjs";
 import { chunkText } from "@/lib/pdfProcessor";
+import { createCollection } from "@/lib/vectorStore";
+import { insertChunks } from "@/lib/vectorStore";
 import { pathToFileURL } from "url";
 import path from "path";
 
@@ -51,6 +53,11 @@ export async function POST(req) {
 
     console.log("Total chunks created:", chunks.length);
     console.log("First chunk preview:", chunks[0].slice(0, 200));
+
+    await createCollection();
+
+    const testChunks = chunks.slice(0, 5);
+    await insertChunks(testChunks);
 
     return new Response(
       JSON.stringify({
