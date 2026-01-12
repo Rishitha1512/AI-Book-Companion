@@ -1,4 +1,5 @@
 import { QdrantClient } from "@qdrant/js-client-rest";
+import { getEmbedding } from "@/lib/geminiClient";
 
 export const qdrant = new QdrantClient({
   url: "http://localhost:6333",
@@ -30,19 +31,27 @@ export async function createCollection() {
 }
 
 export async function insertChunks(chunks) {
-  const points = chunks.map((chunk, index) => ({
-    id: index + 1,
-    vector: new Array(768).fill(0), // TEMP: fake vector (we'll replace with real embeddings later)
-    payload: {
-      text: chunk,
-      chunkIndex: index,
-    },
-  }));
+  const points = [];
+
+  for (let i = 0; i < chunks.length; i++) {
+    const embedding = await getEmbedding(chunks[i]);
+
+    points.push({
+      id: Date.now() + i,
+      vector: embedding,
+      payload: {
+        text: chunks[i],
+        chunkIndex: i,
+      },
+    });
+
+    console.log(`Embedded chunk ${i + 1}/${chunks.length}`);
+  }
 
   await qdrant.upsert(COLLECTION_NAME, {
     wait: true,
     points,
   });
 
-  console.log(`${points.length} chunks inserted into Qdrant`);
+  console.log(`${points.length} real chunks inserted into Qdrant`);
 }
