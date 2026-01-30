@@ -14,6 +14,8 @@
     "@qdrant/js-client-rest": "^1.16.2",
     "langchain": "^1.2.7",
     "next": "16.1.1",
+    "node-fetch": "^3.3.2",
+    "openai": "^6.16.0",
     "pdfjs-dist": "^5.4.530",
     "react": "19.2.3",
     "react-dom": "19.2.3"
