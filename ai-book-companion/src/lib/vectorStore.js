@@ -1,8 +1,15 @@
 import { QdrantClient } from "@qdrant/js-client-rest";
 import { getEmbedding } from "@/lib/geminiClient";
 
+const qdrantUrl = process.env.QDRANT_URL;
+const qdrantPortRaw = process.env.QDRANT_PORT;
+const qdrantPort = qdrantPortRaw ? Number(qdrantPortRaw) : undefined;
+
 export const qdrant = new QdrantClient({
-  url: process.env.QDRANT_URL,
+  url: qdrantUrl,
+  port: Number.isFinite(qdrantPort) ? qdrantPort : undefined,
+  apiKey: process.env.QDRANT_API_KEY,
+  checkCompatibility: false,
 });
 
 // Name of our collection
