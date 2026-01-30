@@ -8,3 +8,24 @@ export async function getEmbedding(text) {
   const result = await model.embedContent(text);
   return result.embedding.values;
 }
+
+export async function generateAnswer(context, question) {
+  const model = genAI.getGenerativeModel({
+    model: "gemini-2.5-flash",
+  });
+
+  const prompt = `
+You are an AI assistant.
+Answer the question using ONLY the provided book content.
+If the answer is not present, say "The book does not contain this information."
+
+Book content:
+${context}
+
+Question:
+${question}
+`;
+
+  const result = await model.generateContent(prompt);
+  return result.response.text();
+}

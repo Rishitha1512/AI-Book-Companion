@@ -55,3 +55,12 @@ export async function insertChunks(chunks) {
 
   console.log(`${points.length} real chunks inserted into Qdrant`);
 }
+
+export async function searchSimilarChunks(queryEmbedding, limit = 3) {
+  const results = await qdrant.search(COLLECTION_NAME, {
+    vector: queryEmbedding,
+    limit,
+  });
+
+  return results.map((point) => point.payload.text);
+}
