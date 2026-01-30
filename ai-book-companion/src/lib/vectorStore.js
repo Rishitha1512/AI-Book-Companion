@@ -2,7 +2,7 @@ import { QdrantClient } from "@qdrant/js-client-rest";
 import { getEmbedding } from "@/lib/geminiClient";
 
 export const qdrant = new QdrantClient({
-  url: "http://localhost:6333",
+  url: process.env.QDRANT_URL,
 });
 
 // Name of our collection
